@@ -333,6 +333,19 @@ a:hover { color: var(--teal-dark); }
   color: var(--navy);
 }
 .form-success.show { display: block; }
+.form-error {
+  display: none;
+  margin-top: 1.4em;
+  max-width: 560px;
+  padding: 1em 1.4em;
+  border-radius: 12px;
+  background: #fdecea;
+  color: #8a1f17;
+  font-size: .85rem;
+}
+.form-error.show { display: block; }
+.hp { position: absolute !important; left: -10000px !important; width: 1px; height: 1px; overflow: hidden; }
+.btn[disabled] { opacity: .6; cursor: wait; }
 
 /* ---------- Footer ---------- */
 .site-footer { background: var(--light); padding: 5vw 0; }

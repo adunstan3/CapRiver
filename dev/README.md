@@ -10,6 +10,8 @@ python3 dev/server.py        # http://localhost:8000
 
 The server serves `../CapRiver` and adds `comments.js` to every HTML page it serves. The script is added in memory only; the HTML files on disk are never changed. Open pages reload automatically when site files change.
 
+The contact form posts to Netlify Forms in production. Locally, the dev server stands in for Netlify and saves each submission to `dev/form-submissions.json`. No email is sent locally.
+
 ## Commenting
 
 - **Ctrl+click** any element to open a comment box. **Enter** saves, **Shift+Enter** adds a new line, and **Esc** cancels.

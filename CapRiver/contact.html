@@ -39,7 +39,12 @@
               <p class="tiny-text">Working virtually with businesses nationwide</p>
             </div>
 
-            <form class="form" id="contact-form" novalidate>
+            <!-- Netlify Forms: submissions are stored in Netlify and emailed to
+                 contact@capitalriveradvisors.com via Forms > Submission notifications. -->
+            <form class="form" id="contact-form" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+              <input type="hidden" name="form-name" value="contact">
+              <input type="hidden" name="subject" value="New consultation request from the Capital River Advisors website">
+              <p class="hp" aria-hidden="true"><label>Leave this empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
               <fieldset>
                 <legend>Name</legend>
                 <div class="row">
@@ -116,12 +121,15 @@
 
             <div class="form-success" role="status">
               <h4>Thank you!</h4>
-              <p style="margin:0">Your email app should open with your message ready to send. If it doesn't, email <a href="mailto:contact@capitalriveradvisors.com">contact@capitalriveradvisors.com</a> directly.</p>
+              <p style="margin:0">Your message has been sent. I'll review your note and follow up to arrange a time to talk.</p>
+            </div>
+            <div class="form-error" role="alert">
+              Sorry, your message couldn't be sent. Please try again, or email <a href="mailto:contact@capitalriveradvisors.com">contact@capitalriveradvisors.com</a> directly.
             </div>
           </div>
 
           <div class="contact-media reveal">
-            <img src="images/contact-river.webp" alt="Aerial view of a river winding through green grassland">
+            <img src="images/contact-river.jpg" alt="Aerial view of a river winding through green grassland">
           </div>
         </div>
       </div>

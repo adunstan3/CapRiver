@@ -1,0 +1,18 @@
+# Netlify configuration
+# Only the CapRiver/ folder is published. The dev/ folder (local comment tool,
+# dev server) is never deployed.
+[build]
+  publish = "CapRiver"
+
+# Long-lived caching for images; HTML/CSS/JS revalidate on each visit so
+# updates show up immediately.
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

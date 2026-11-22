@@ -7,6 +7,8 @@ DEV-ONLY local server for the Capital River static site.
   exists only when viewing through this server. Nothing in the site
   folder references it, so it never ships to production.
 - Stores comments in dev/comments.json.
+- Mocks Netlify Forms: POSTs to "/" are saved to dev/form-submissions.json
+  (no email is sent locally).
 - Exposes a "version" stamp of the site files so open pages reload
   automatically after the site is edited.
 
@@ -24,6 +26,7 @@ DEV_DIR = os.path.dirname(os.path.abspath(__file__))
 SITE_DIR = os.path.normpath(os.path.join(DEV_DIR, "..", "CapRiver"))
 COMMENTS_FILE = os.path.join(DEV_DIR, "comments.json")
 CLIENT_JS = os.path.join(DEV_DIR, "comments.js")
+FORMS_FILE = os.path.join(DEV_DIR, "form-submissions.json")
 INJECT = b'<script src="/__dev/comments.js"></script>'
 LOCK = threading.Lock()
 
@@ -122,8 +125,32 @@ class Handler(SimpleHTTPRequestHandler):
             return
         super().do_GET()
 
+    def mock_netlify_form(self):
+        """Stand-in for Netlify Forms: record the submission locally, send no email."""
+        from urllib.parse import parse_qs
+        length = int(self.headers.get("Content-Length") or 0)
+        fields = parse_qs(self.rfile.read(length).decode("utf-8", "replace"))
+        entry = {k: (v if len(v) > 1 else v[0]) for k, v in fields.items()}
+        entry["_received"] = time.strftime("%Y-%m-%d %H:%M:%S")
+        with LOCK:
+            try:
+                with open(FORMS_FILE, encoding="utf-8") as f:
+                    subs = json.load(f)
+            except (FileNotFoundError, json.JSONDecodeError):
+                subs = []
+            subs.append(entry)
+            with open(FORMS_FILE, "w", encoding="utf-8") as f:
+                json.dump(subs, f, indent=2, ensure_ascii=False)
+        print(f"[dev] form '{entry.get('form-name')}' submission saved to {FORMS_FILE} (no email sent)")
+        self.send_json({"ok": True})
+
     def do_POST(self):
-        if self.path.split("?", 1)[0] != "/__dev/comments":
+        path = self.path.split("?", 1)[0]
+        ctype = self.headers.get("Content-Type", "")
+        if path == "/" and ctype.startswith("application/x-www-form-urlencoded"):
+            self.mock_netlify_form()
+            return
+        if path != "/__dev/comments":
             self.send_error(404)
             return
         try:

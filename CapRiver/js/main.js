@@ -27,8 +27,8 @@
   els.forEach(function (el) { io.observe(el); });
 })();
 
-// Contact form: validate, then open the visitor's email client with the details
-// (a static site has no server to receive form posts).
+// Contact form: validate, then submit to Netlify Forms without leaving the page.
+// Netlify emails each submission to contact@capitalriveradvisors.com.
 (function () {
   var form = document.getElementById('contact-form');
   if (!form) return;
@@ -48,25 +48,31 @@
       return;
     }
 
-    var d = new FormData(form);
-    var declined = d.getAll('declined').join(', ') || '—';
-    var body = [
-      'Name: ' + d.get('fname') + ' ' + d.get('lname'),
-      'Email: ' + d.get('email'),
-      'Phone: ' + (d.get('phone') || '—'),
-      'Business name: ' + (d.get('business') || '—'),
-      'Roughly how much financing: ' + (d.get('amount') || '—'),
-      "What it's for: " + (d.get('purpose') || '—'),
-      'Declined for a loan in the last 12 months: ' + declined,
-      '',
-      d.get('message')
-    ].join('\n');
-    var subject = 'Consultation request from ' + d.get('fname') + ' ' + d.get('lname');
-    window.location.href = 'mailto:contact@capitalriveradvisors.com?subject=' +
-      encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    // Personalise the notification email subject
+    var subjectInput = form.querySelector('input[name="subject"]');
+    subjectInput.value = 'Consultation request from ' +
+      form.fname.value.trim() + ' ' + form.lname.value.trim() + ' (capitalriveradvisors.com)';
 
-    form.style.display = 'none';
-    document.querySelector('.form-success').classList.add('show');
+    var button = form.querySelector('button[type="submit"]');
+    var errorBox = document.querySelector('.form-error');
+    errorBox.classList.remove('show');
+    button.disabled = true;
+    button.textContent = 'Sending…';
+
+    // Netlify Forms: POST url-encoded data to the site root
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(new FormData(form)).toString()
+    }).then(function (res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      form.style.display = 'none';
+      document.querySelector('.form-success').classList.add('show');
+    }).catch(function () {
+      errorBox.classList.add('show');
+      button.disabled = false;
+      button.textContent = 'Send message';
+    });
   });
 
   // "No" / "Yes" behave like a single choice

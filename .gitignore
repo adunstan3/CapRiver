@@ -4,3 +4,4 @@ __pycache__/
 # dev-only comment store (local, transient)
 dev/comments.json
 dev/comments.json.tmp
+dev/form-submissions.json
