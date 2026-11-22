@@ -12,6 +12,12 @@ The server serves `../CapRiver` and adds `comments.js` to every HTML page it ser
 
 The contact form posts to Netlify Forms in production. Locally, the dev server stands in for Netlify and saves each submission to `dev/form-submissions.json`. No email is sent locally.
 
+## Phone preview
+
+- **Phone view button** (bottom-right of every page): opens `/__dev/phone`, which shows the site in a phone-sized frame. A device picker covers iPhone SE/15/Pro Max, Galaxy, Pixel and iPad mini, and there's a Rotate button. Ctrl+click comments work inside the frame and are tagged with that screen size.
+- **Real phone:** start the server with `python3 dev/server.py 8000 --lan`, then open the printed `http://<mac-ip>:8000/` address on a phone on the same Wi-Fi. This makes the dev server reachable by other devices on that network, so only use it on a trusted network.
+- **Chrome DevTools:** press Cmd+Opt+I, then Cmd+Shift+M, and pick a device. This also imitates touch input and the screen's pixel density.
+
 ## Commenting
 
 - **Ctrl+click** any element to open a comment box. **Enter** saves, **Shift+Enter** adds a new line, and **Esc** cancels.

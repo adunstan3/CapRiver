@@ -27,6 +27,7 @@ SITE_DIR = os.path.normpath(os.path.join(DEV_DIR, "..", "CapRiver"))
 COMMENTS_FILE = os.path.join(DEV_DIR, "comments.json")
 CLIENT_JS = os.path.join(DEV_DIR, "comments.js")
 FORMS_FILE = os.path.join(DEV_DIR, "form-submissions.json")
+PHONE_HTML = os.path.join(DEV_DIR, "phone.html")
 INJECT = b'<script src="/__dev/comments.js"></script>'
 LOCK = threading.Lock()
 
@@ -103,6 +104,15 @@ class Handler(SimpleHTTPRequestHandler):
             with LOCK:
                 self.send_json(load_comments())
             return
+        if path == "/__dev/phone":
+            with open(PHONE_HTML, "rb") as f:
+                body = f.read()
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
         if path == "/__dev/version":
             self.send_json({"version": site_version()})
             return
@@ -169,6 +179,7 @@ class Handler(SimpleHTTPRequestHandler):
             "selector": str(data.get("selector", "")),
             "element": str(data.get("element", ""))[:600],
             "text": str(data.get("text", ""))[:200],
+            "viewport": str(data.get("viewport", ""))[:40],
             "comment": text,
             "created": time.strftime("%Y-%m-%d %H:%M:%S"),
         }
@@ -191,11 +202,30 @@ class Handler(SimpleHTTPRequestHandler):
         self.send_json({"deleted": len(comments) - len(remaining)})
 
 
+def lan_ip():
+    import socket
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(("10.255.255.255", 1))  # no packets are sent; just picks the outbound interface
+        return s.getsockname()[0]
+    except OSError:
+        return None
+    finally:
+        s.close()
+
+
 if __name__ == "__main__":
-    port = int(sys.argv[1]) if len(sys.argv) > 1 else 8000
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    lan = "--lan" in sys.argv
+    port = int(args[0]) if args else 8000
     if not os.path.exists(COMMENTS_FILE):
         save_comments([])
-    server = ThreadingHTTPServer(("127.0.0.1", port), Handler)
+    server = ThreadingHTTPServer(("0.0.0.0" if lan else "127.0.0.1", port), Handler)
     print(f"Dev server: http://localhost:{port}/  (serving {SITE_DIR})")
+    print(f"Phone view: http://localhost:{port}/__dev/phone")
+    if lan:
+        ip = lan_ip()
+        print(f"On your phone (same Wi-Fi): http://{ip or '<this-mac-ip>'}:{port}/")
+        print("  Note: --lan makes the dev server reachable by other devices on this network.")
     print(f"Comments:   {COMMENTS_FILE}")
     server.serve_forever()

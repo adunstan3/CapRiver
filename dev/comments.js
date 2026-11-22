@@ -29,6 +29,8 @@
     '.__dc-counter{position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:2147483646;background:' + ORANGE + ';color:#fff;border-radius:999px;padding:5px 12px 5px 8px;display:none;align-items:center;gap:7px;box-shadow:0 2px 10px rgba(0,0,0,.2);font-weight:600;cursor:default;user-select:none}',
     '.__dc-counter.show{display:flex}',
     '.__dc-counter b{background:#fff;color:' + ORANGE + ';border-radius:999px;min-width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;padding:0 6px;font-size:12px}',
+    '.__dc-phone{position:fixed;right:14px;bottom:14px;z-index:2147483646;background:#1d1f24;color:#fff!important;text-decoration:none!important;border-radius:999px;padding:8px 14px;font-weight:600;box-shadow:0 4px 14px rgba(0,0,0,.25);opacity:.85}',
+    '.__dc-phone:hover{opacity:1;background:' + ORANGE + '}',
     '.__dc-dot{position:absolute;z-index:2147483645;width:16px;height:16px;border-radius:50%;background:' + ORANGE + ';border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.15),0 2px 6px rgba(0,0,0,.25);cursor:pointer;color:#fff;font:700 9px/12px -apple-system,Arial,sans-serif;text-align:center;padding:0}',
     '.__dc-dot:hover{transform:scale(1.25)}',
     '.__dc-hover{outline:2px dashed ' + ORANGE + '!important;outline-offset:2px!important;cursor:crosshair!important}',
@@ -55,10 +57,23 @@
   document.head.appendChild(css);
 
   // ---------- counter ----------
+  var inFrame = window.self !== window.top; // shown inside /__dev/phone
   var counter = document.createElement('div');
   counter.className = '__dc-ui __dc-counter';
   counter.innerHTML = '<b>0</b><span>comments</span>';
+  if (inFrame) counter.style.visibility = 'hidden';
   document.body.appendChild(counter);
+
+  // ---------- phone preview button ----------
+  var coarse = window.matchMedia && matchMedia('(pointer: coarse)').matches; // real phone/tablet
+  if (!inFrame && !coarse) {
+    var phoneBtn = document.createElement('a');
+    phoneBtn.className = '__dc-ui __dc-phone';
+    phoneBtn.textContent = '📱 Phone view';
+    phoneBtn.title = 'Preview this page in a phone-sized frame';
+    phoneBtn.href = '/__dev/phone?path=' + encodeURIComponent(location.pathname + location.hash);
+    document.body.appendChild(phoneBtn);
+  }
 
   var dotLayer = document.createElement('div');
   dotLayer.className = '__dc-ui';
@@ -212,6 +227,7 @@
             selector: selectorFor(target),
             element: describe(target),
             text: (target.innerText || target.getAttribute('alt') || '').trim().replace(/\s+/g, ' ').slice(0, 200),
+            viewport: window.innerWidth + 'x' + window.innerHeight + (inFrame ? ' (phone view)' : ''),
             comment: text
           })
         }).then(function () { closePopup(); refresh(); })
