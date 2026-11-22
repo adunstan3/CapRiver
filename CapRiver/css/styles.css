@@ -228,10 +228,22 @@ a:hover { color: var(--teal-dark); }
 
 /* Why section */
 .why { text-align: center; }
-.why h2 { max-width: 15ch; margin: 0 auto 1.2em; }
-.why__item { max-width: 900px; margin: 0 auto 2.2em; }
-.why__item h4 { margin-bottom: .55em; }
-.why__item p { font-size: 0.9rem; margin: 0; }
+.why h2 { max-width: none; margin: 0 auto 1.1em; }
+.why__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: left;
+}
+.why__item {
+  background: var(--white);
+  border-radius: 14px;
+  padding: 2em 2.2em;
+}
+.why__item h4 { margin-bottom: .55em; font-size: 1.25rem; }
+.why__item p { font-size: 0.95rem; margin: 0; }
 
 /* Meet Ethan */
 .meet .split { grid-template-columns: 1fr 1fr; align-items: center; }
@@ -292,18 +304,7 @@ a:hover { color: var(--teal-dark); }
   grid-template-columns: repeat(3, 1fr);
   gap: 3vw;
 }
-.service__icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: var(--tint);
-  color: var(--teal);
-}
-.service__icon svg { width: 30px; height: 30px; }
-.service h3 { margin: .9em 0 .8em; font-size: clamp(1.5rem, 2.2vw, 2rem); }
+.service h3 { margin: 0 0 .8em; font-size: clamp(1.5rem, 2.2vw, 2rem); }
 .service-body { padding-right: 2vw; }
 .service p, .service li { font-size: 0.85rem; line-height: 1.9; }
 .service ul { padding-left: 2.4em; margin: 0 0 1em; }
@@ -436,6 +437,30 @@ a:hover { color: var(--teal-dark); }
   .split, .intro .split, .meet .split, .services-intro .split { grid-template-columns: 1fr; gap: 10vw; }
   .intro__text { font-size: 1.05rem; }
   .intro__media { width: 100%; }
+  /* Shorter, landscape crop of the river photo on phones */
+  .intro__media img { aspect-ratio: 16 / 10; object-position: center 70%; }
+
+  /* "Why" cards stack in one column on phones */
+  .why__grid { grid-template-columns: 1fr; gap: 16px; }
+  .why__item { padding: 1.5em 1.6em; }
+
+  /* Phones: heading above the photo, rest of the text below it */
+  .meet .split,
+  .about-intro .split { display: flex; flex-direction: column; align-items: stretch; gap: 0; }
+  .meet__text > a, .about-intro .text-col > a { align-self: flex-start; }
+  .meet__text,
+  .about-intro .text-col { display: contents; }
+  .meet__text h2 { order: 0; }
+  .meet__media { order: 1; margin-bottom: 1.8em; }
+  .meet__text > :not(h2) { order: 2; }
+  .about-intro .text-col > h1,
+  .about-intro .subtitle { order: 0; }
+  .about-intro .subtitle { margin-bottom: 1.4em; }
+  .about-photo { order: 1; margin-bottom: 2em; }
+  .about-intro .text-col > :not(h1):not(.subtitle) { order: 2; }
+
+  /* Contact photo not needed on phones (lazy-loaded, so it isn't downloaded) */
+  .contact-media { display: none; }
   .cards, .steps__grid, .service-cols { grid-template-columns: 1fr; gap: 10vw; }
   .service h3 { min-height: 0; margin-bottom: .8em; }
   .meet__media img { width: 100%; }
