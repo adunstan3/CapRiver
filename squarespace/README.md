@@ -69,9 +69,28 @@ The local site shows **Home** (to the left of About) on every page except the ho
   - `.crx { display: flow-root }` stops margins leaking out of our content.
   - The Code Block editor is CodeMirror 6 (set it through `.cm-content.cmTile.view.dispatch`). The Custom CSS editor is CodeMirror 5. Content is loaded by script and checked against a SHA-256 of the export.
   - The admin's CSP blocks fetching from localhost.
-- [ ] Step 5: owner reviews the drafts on desktop and phone.
-- [ ] Step 6, at swap time and with the owner's OK (site-wide changes):
-  - header logo set to `logo-lockup.png`, plus the header style
-  - footer content replaced with `footer.html`
-  - Home link added to the navigation
-  - drafts become the live pages, with the old pages moved to Not Linked
+- [x] Step 5: owner reviewed the drafts and asked for more space below the Contact form; done.
+- [x] **Step 6: swap done (2026-11-22)**:
+  - **Header:** logo is now `logo-lockup.png` (Logo Height 74px, Mobile Logo Max Height 50px). Header Height changed from 4.8vw to 1.2vw.
+  - **Footer:** now one Code Block with `footer.html`. The old footer section is saved in Saved Sections as a backup.
+  - **Navigation:**
+    - A **Home** link (`/`) is first in Main Navigation, hidden on the homepage by CSS.
+    - Main Navigation is Home, About (`/our-team`), Services (`/services`) and Contact (`/contact`), all pointing at the new pages.
+    - The new pages got the old pages' SEO titles and descriptions.
+    - The new homepage (slug `/home-2026`) is set as homepage. The homepage SEO comes from the site-wide SEO settings.
+  - **Rollback copies in Not Linked:**
+    - `Home OLD (backup)` at `/home-1`
+    - `About OLD (backup)` at `/our-team-backup-2026`
+    - `Services OLD (backup)` at `/services-backup-2026`
+    - `Contact OLD (backup)` at `/contact-backup-2026`
+  - **To roll back a page:** swap the slugs back, drag the pages back between Main Navigation and Not Linked, or use "Set as Homepage" on `Home OLD`.
+  - **Not yet checked on a real phone:** the mobile header logo, the Contact photo being hidden, and the mobile menu.
+  - **Not copied:** the pages' Social Image settings (link-preview images), if any were set.
+
+## Updating the live site from now on
+
+Edit `CapRiver/`, run `python3 squarespace/export.py`, then re-paste only what changed:
+
+- a page's Code Block
+- `custom-css-FULL.css`, via a targeted replace checked against SHA-256 (see the lessons learned above)
+- `footer.html`

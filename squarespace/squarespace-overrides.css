@@ -23,11 +23,15 @@
 
 /* Contact page: Squarespace's native form section sits right after our intro Code Block.
    Only that section is targeted (adjacent to .crx), so other pages are unaffected. */
-.page-section:has(.crx) + .page-section { padding-top: 0 !important; }
+.page-section:has(.crx) + .page-section { padding-top: 0 !important; padding-bottom: 7vw !important; }
 /* one auto-height row: form and photo share the same top, photo stretches to the form's height */
 .page-section:has(.crx) + .page-section .fluid-engine { grid-template-rows: auto !important; }
 .page-section:has(.crx) + .page-section .fe-block { grid-row-start: 1 !important; grid-row-end: 2 !important; }
 .page-section:has(.crx) + .page-section .sqs-block { justify-content: flex-start !important; }
 @media (max-width: 767px) {
+  .page-section:has(.crx) + .page-section { padding-bottom: 48px !important; }
   .page-section:has(.crx) + .page-section .fe-block:has(img) { display: none !important; }
 }
+
+/* Footer: our footer Code Block fills the footer section (no Squarespace top padding) */
+#footer-sections .page-section:has(.crx) { padding-top: 0 !important; }
