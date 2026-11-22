@@ -1,0 +1,5 @@
+/Users/andrewdunstan/Developer/Websites/CapRiver/CapRiver/images/banner.webp
+/Users/andrewdunstan/Developer/Websites/CapRiver/CapRiver/images/ethan.webp
+/Users/andrewdunstan/Developer/Websites/CapRiver/CapRiver/images/logo.webp
+/Users/andrewdunstan/Developer/Websites/CapRiver/CapRiver/images/river-stones.webp
+/Users/andrewdunstan/Developer/Websites/CapRiver/CapRiver/images/services-header.webp
