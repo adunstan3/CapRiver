@@ -203,8 +203,8 @@ def clean_html(fragment):
     fragment = re.sub(r'class="\s*"', "", fragment)
     fragment = re.sub(r'class="\s+', 'class="', fragment)
     # Links to Squarespace slugs
-    fragment = re.sub(r'href="(index|about|services|contact)\.html"',
-                      lambda m: f'href="{LINK_MAP[m.group(1) + ".html"]}"', fragment)
+    fragment = re.sub(r'href="(index|about|services|contact)\.html(#[\w-]+)?"',
+                      lambda m: f'href="{LINK_MAP[m.group(1) + ".html"]}{m.group(2) or ""}"', fragment)
     # Images
     fragment = re.sub(r'src="images/([^"]+)"', lambda m: f'src="{img_url(m.group(1))}"', fragment)
     fragment = re.sub(r'\s+loading="lazy"', "", fragment)

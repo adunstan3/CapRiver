@@ -262,6 +262,7 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 3vw;}
 .crx .service h3 { margin: 0 0 .8em; font-size: clamp(1.5rem, 2.2vw, 2rem);}
+.crx .service { scroll-margin-top: 24px;}
 .crx .service-body { padding-right: 2vw;}
 .crx .service p,
 .crx .service li { font-size: 0.85rem; line-height: 1.9;}
@@ -356,6 +357,13 @@
 .crx .hero { min-height: 0;}
 .crx .hero--image::before { background: rgba(4, 8, 58, .56);}
 .crx .hero .btn { margin-top: 3em;}
+.crx .hero--image { display: block; padding: 0; min-height: 0; height: 760px;}
+.crx .hero--image .container { height: 100%; display: grid; grid-template-rows: 30% 7.5% 36.5% 17% 9%;}
+.crx .hero--image h1 { grid-row: 1; align-self: center; margin: 0;}
+.crx .hero--image .lead { grid-row: 3; align-self: start; margin: 0; padding-top: .7em; line-height: 1.7;}
+.crx .hero--image .hero__cta { grid-row: 4; align-self: center;}
+.crx .hero--image .hero__cta .tiny-text { margin: 0; font-size: .82rem;}
+.crx .hero--image .hero__cta .btn { margin-top: .6em;}
 .crx .site-footer .container { padding: 0 var(--gutter); flex-direction: column; gap: 2em;}
 .crx .footer-contact { text-align: center;}
 }
@@ -398,3 +406,11 @@
 
 /* Footer: our footer Code Block fills the footer section (no Squarespace top padding) */
 #footer-sections .page-section:has(.crx) { padding-top: 0 !important; }
+
+/* Contact form (Squarespace native Form Block): taller message box everywhere */
+.page-section:has(.crx) + .page-section .form-item.textarea textarea { min-height: 160px !important; }
+@media (max-width: 767px) {
+  /* centred Send button; breathing room under the wrapped "(required)" captions */
+  .page-section:has(.crx) + .page-section .form-button-wrapper { text-align: center !important; }
+  .page-section:has(.crx) + .page-section .fields.name .caption { display: block; margin-bottom: 8px !important; }
+}

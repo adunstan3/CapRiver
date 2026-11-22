@@ -399,6 +399,7 @@ a:hover { color: var(--teal-dark); }
   gap: 3vw;
 }
 .service h3 { margin: 0 0 .8em; font-size: clamp(1.5rem, 2.2vw, 2rem); }
+.service { scroll-margin-top: 24px; }
 .service-body { padding-right: 2vw; }
 .service p, .service li { font-size: 0.85rem; line-height: 1.9; }
 .service ul { padding-left: 2.4em; margin: 0 0 1em; }
@@ -455,7 +456,7 @@ a:hover { color: var(--teal-dark); }
   outline: none;
   transition: border-color .2s, box-shadow .2s;
 }
-.form textarea { border-radius: 24px; min-height: 100px; resize: vertical; }
+.form textarea { border-radius: 24px; min-height: 160px; resize: vertical; }
 .form select {
   appearance: none;
   -webkit-appearance: none;
@@ -603,6 +604,18 @@ a:hover { color: var(--teal-dark); }
   .hero { min-height: 0; }
   .hero--image::before { background: rgba(4, 8, 58, .56); }
   .hero .btn { margin-top: 3em; }
+
+  /* Phones: same photo-band layout as desktop. The hero is far narrower than the
+     photo's 2.47 ratio, so `cover` scales by height and the bands line up exactly:
+     headline in the sky, intro just below the roof line, CTA over the water (74–91%). */
+  .hero--image { display: block; padding: 0; min-height: 0; height: 760px; }
+  .hero--image .container { height: 100%; display: grid; grid-template-rows: 30% 7.5% 36.5% 17% 9%; }
+  .hero--image h1 { grid-row: 1; align-self: center; margin: 0; }
+  .hero--image .lead { grid-row: 3; align-self: start; margin: 0; padding-top: .7em; line-height: 1.7; }
+  .hero--image .hero__cta { grid-row: 4; align-self: center; }
+  .hero--image .hero__cta .tiny-text { margin: 0; font-size: .82rem; }
+  .hero--image .hero__cta .btn { margin-top: .6em; }
+  .form .sub-label { display: block; margin-bottom: .35em; }
   .site-footer .container { padding: 0 var(--gutter); flex-direction: column; gap: 2em; }
   .footer-contact { text-align: center; }
   .form .row { grid-template-columns: 1fr; }

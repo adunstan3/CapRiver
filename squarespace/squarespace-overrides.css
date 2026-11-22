@@ -35,3 +35,11 @@
 
 /* Footer: our footer Code Block fills the footer section (no Squarespace top padding) */
 #footer-sections .page-section:has(.crx) { padding-top: 0 !important; }
+
+/* Contact form (Squarespace native Form Block): taller message box everywhere */
+.page-section:has(.crx) + .page-section .form-item.textarea textarea { min-height: 160px !important; }
+@media (max-width: 767px) {
+  /* centred Send button; breathing room under the wrapped "(required)" captions */
+  .page-section:has(.crx) + .page-section .form-button-wrapper { text-align: center !important; }
+  .page-section:has(.crx) + .page-section .fields.name .caption { display: block; margin-bottom: 8px !important; }
+}
