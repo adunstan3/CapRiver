@@ -194,12 +194,12 @@ a:hover { color: var(--teal-dark); }
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(4, 8, 58, .80) 0%, rgba(4, 8, 58, .62) 50%, rgba(4, 8, 58, .38) 100%);
+  background: linear-gradient(90deg, rgba(4, 8, 58, .64) 0%, rgba(4, 8, 58, .44) 50%, rgba(4, 8, 58, .2) 100%);
 }
 .hero--image .container { position: relative; }
-.hero--image h1 { color: var(--white); }
+.hero--image h1 { color: var(--white); text-shadow: 0 2px 18px rgba(4, 8, 58, .45); }
 .hero--image .lead,
-.hero--image .tiny-text { color: rgba(255, 255, 255, .9); }
+.hero--image .tiny-text { color: rgba(255, 255, 255, .95); text-shadow: 0 1px 10px rgba(4, 8, 58, .6); }
 
 /* Laptop/desktop: lock text to the bridge in the photo.
    banner.webp is 2500x1011 (ratio 2.47). Keeping the hero no wider than that
@@ -347,12 +347,6 @@ a:hover { color: var(--teal-dark); }
 .service ul { padding-left: 2.4em; margin: 0 0 1em; }
 .service strong { font-weight: 600; color: #111; }
 
-.services-lead {
-  font-size: clamp(1.4rem, 2vw, 1.9rem);
-  font-weight: 500;
-  color: var(--navy);
-  margin: 0 0 1.6em;
-}
 .callout {
   margin-top: 5vw;
   background: var(--tint);
@@ -365,15 +359,16 @@ a:hover { color: var(--teal-dark); }
 
 .approach { text-align: center; padding: 4vw 0; }
 .approach p { max-width: 1100px; margin: 0 auto; font-size: 0.9rem; }
+.approach p + p { margin-top: .8em; }
 
 /* Contact */
 .contact-info p { font-size: 0.9rem; }
 .contact-info .tiny-text { color: var(--navy); font-weight: 400; }
 /* Contact: full-width intro, then form + photo with aligned tops */
-.contact-intro { margin-bottom: 3.5vw; }
+.contact-intro { margin-bottom: 3.5vw; text-align: center; }
 .contact-intro h1 { max-width: none; }
-.contact-intro .contact-lead { font-size: 1.15rem; line-height: 1.8; max-width: 860px; margin-bottom: 1em; }
-.contact-details { display: flex; flex-wrap: wrap; align-items: baseline; gap: .4em 2em; margin: 0; }
+.contact-intro .contact-lead { font-size: 1.15rem; line-height: 1.8; max-width: 860px; margin: 0 auto 1em; }
+.contact-details { display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; gap: .4em 2em; margin: 0; }
 .contact-details .text-link { font-size: 1rem; }
 .contact-split { align-items: stretch; }
 .contact-media { position: relative; min-height: 420px; }
@@ -469,6 +464,14 @@ a:hover { color: var(--teal-dark); }
 }
 
 /* ---------- Responsive ---------- */
+/* Landscape phones / small tablets: stacked layout, but keep photos from
+   growing to the full width (and therefore very tall). */
+@media (min-width: 600px) and (max-width: 900px) {
+  .meet__media img,
+  .about-photo img { max-width: 420px; }
+  .intro__media img { max-height: 340px; }
+  .services-intro__media img { max-height: 380px; }
+}
 @media (max-width: 900px) {
   :root { --gutter: 6vw; }
   .menu-toggle { display: block; }
@@ -493,8 +496,10 @@ a:hover { color: var(--teal-dark); }
   .brand__name { font-size: 1rem; }
   .brand__sub { font-size: .82rem; }
 
-  .section { padding: 14vw 0; }
-  .split, .intro .split, .meet .split, .services-intro .split { grid-template-columns: 1fr; gap: 10vw; }
+  .section { padding: min(14vw, 64px) 0; }
+  .approach { padding: min(10vw, 48px) 0; }
+  .hero { padding: min(8vw, 48px) 0; }
+  .split, .intro .split, .meet .split, .services-intro .split { grid-template-columns: 1fr; gap: min(10vw, 40px); }
   .intro__text { font-size: 1.05rem; }
   .intro__media { width: 100%; }
   /* Shorter, landscape crop of the river photo on phones */
@@ -519,18 +524,27 @@ a:hover { color: var(--teal-dark); }
   .about-photo { order: 1; margin-bottom: 2em; }
   .about-intro .text-col > :not(h1):not(.subtitle) { order: 2; }
 
-  .callout { padding: 1.6em 1.4em; margin-top: 12vw; }
+  .callout { padding: 1.6em 1.4em; margin-top: min(12vw, 48px); }
   .callout p { font-size: 1rem; }
-  .contact-intro { margin-bottom: 8vw; }
+  .contact-intro { margin-bottom: min(8vw, 32px); }
 
   /* Contact photo not needed on phones (lazy-loaded, so it isn't downloaded) */
   .contact-media { display: none; }
-  .cards, .steps__grid, .service-cols { grid-template-columns: 1fr; gap: 10vw; }
+  .cards, .steps__grid, .service-cols { grid-template-columns: 1fr; gap: min(10vw, 36px); }
+  .cards { margin-top: 1.2em; }
+  .site-footer { padding: min(8vw, 40px) 0; }
+
+  /* Phone-only alignment */
+  .why h2 { text-align: left; }
+  .cta { text-align: left; }
+  .cta h2, .cta p { margin-left: 0; margin-right: 0; }
+  .cta .btn { display: table; margin: 0 auto; }
+  #contact-form button[type="submit"] { display: block; margin: 0 auto; }
   .service h3 { min-height: 0; margin-bottom: .8em; }
   .meet__media img { width: 100%; }
   .services-intro__media img { width: 100%; }
   .hero { min-height: 0; }
-  .hero--image::before { background: rgba(4, 8, 58, .7); }
+  .hero--image::before { background: rgba(4, 8, 58, .56); }
   .hero .btn { margin-top: 3em; }
   .site-footer .container { padding: 0 var(--gutter); flex-direction: column; gap: 2em; }
   .footer-contact { text-align: center; }
