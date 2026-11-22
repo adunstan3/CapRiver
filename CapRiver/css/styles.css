@@ -366,7 +366,7 @@ a:hover { color: var(--teal-dark); }
   margin-top: 5vw;
   max-width: 560px;
   padding: 2em;
-  background: var(--light);
+  background: var(--tint);
   border-radius: 16px;
   color: var(--navy);
 }
@@ -386,7 +386,7 @@ a:hover { color: var(--teal-dark); }
 .btn[disabled] { opacity: .6; cursor: wait; }
 
 /* ---------- Footer ---------- */
-.site-footer { background: var(--light); padding: 5vw 0; }
+.site-footer { background: var(--tint); padding: 5vw 0; border-top: 1px solid rgba(4, 8, 58, .08); }
 .site-footer .container {
   display: flex;
   justify-content: space-between;

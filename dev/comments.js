@@ -71,6 +71,7 @@
   // ---------- selector ----------
   function cssEscape(s) { return window.CSS && CSS.escape ? CSS.escape(s) : s; }
   function selectorFor(el) {
+    if (el === document.documentElement) return 'html';
     if (el.id && document.querySelectorAll('#' + cssEscape(el.id)).length === 1) return '#' + cssEscape(el.id);
     var parts = [];
     while (el && el.nodeType === 1 && el !== document.documentElement) {
@@ -305,12 +306,13 @@
   }
 
   function positionDots() {
+    var maxLeft = window.scrollX + document.documentElement.clientWidth - 20; // never past the right edge
     Array.prototype.forEach.call(dotLayer.children, function (dot) {
       var r = dot._el.getBoundingClientRect();
       var hidden = r.width === 0 && r.height === 0;
       dot.style.display = hidden ? 'none' : '';
-      dot.style.left = (r.right + window.scrollX - 8) + 'px';
-      dot.style.top = (r.top + window.scrollY - 8) + 'px';
+      dot.style.left = Math.max(window.scrollX + 2, Math.min(r.right + window.scrollX - 8, maxLeft)) + 'px';
+      dot.style.top = Math.max(window.scrollY + 2, r.top + window.scrollY - 8) + 'px';
     });
   }
   var raf = 0;
