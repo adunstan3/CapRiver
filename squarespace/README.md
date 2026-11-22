@@ -29,6 +29,13 @@ The person driving is Claude through Claude in Chrome. Claude pauses for approva
 6. **Swap in**, only on the owner's go-ahead. The drafts become the live pages, and the old pages move to Not Linked as the rollback.
 7. **Later changes:** edit the repo, re-export, and re-paste only the snippets that changed. To roll back, re-paste an older export from git.
 
+## Navigation
+
+The local site shows **Home** (to the left of About) on every page except the homepage. On Squarespace the header is native:
+
+1. Add a Home link to the Main Navigation, first in the list.
+2. Hide it on the homepage with a rule in `squarespace-overrides.css`. Squarespace marks the homepage's `<body>` with a `homepage` class. The exact header-nav selector gets confirmed in step 2.
+
 ## Testimonials
 
 - **Local dev site:** the testimonial is a carousel with dots, auto-advance every 7 s, a pause button, swipe and arrow keys, and pause on hover or keyboard focus. The dev server adds two clearly-labelled **placeholder** testimonials (`dev/fixtures.js`) so the carousel can be previewed. They never appear in `CapRiver/` or the export.
