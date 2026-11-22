@@ -58,6 +58,20 @@ The local site shows **Home** (to the left of About) on every page except the ho
   - **Fonts:** the site loads Poppins only in weights 300, 500 and 700. The `@import` adds 400 and 600.
   - **Homepage:** `<body>` has a `homepage` class, used to hide the Home nav link there.
   - **Pages:** Main Navigation has About, Services and Contact. Not Linked has the homepage plus several older copies ("… FIRM", "About Us", etc.), which must not be touched.
-- [ ] Confirm the LESS compile: paste into the Custom CSS editor and check for errors before saving
-- [ ] Step 3: upload images to Assets, then fill in `image-urls.json`
-- [ ] Steps 4–6
+- [x] LESS compile confirmed: Squarespace's compiler (less.js 1.3.3) output keeps the escaped values intact.
+- [x] Step 3: images uploaded to Custom CSS › Custom Files; URLs are in `image-urls.json`.
+- [x] Custom CSS saved (`out/custom-css-FULL.css`). The live pages were checked and look unchanged.
+- [x] Step 4: draft pages in Not Linked:
+  - `/home-new-draft`, `/about-new-draft` and `/services-new-draft`: one Code Block each.
+  - `/contact-new-draft`: an intro Code Block, then a copy of the live Contact section (saved to Saved Sections, with the copy's heading and text blocks deleted). It keeps Squarespace's native Form Block and photo, lined up by overrides that only target the section after `.crx`.
+- **Lessons learned:**
+  - Squarespace pads the first section's top by the header height (the header overlays the page), so only side and bottom padding are removed.
+  - `.crx { display: flow-root }` stops margins leaking out of our content.
+  - The Code Block editor is CodeMirror 6 (set it through `.cm-content.cmTile.view.dispatch`). The Custom CSS editor is CodeMirror 5. Content is loaded by script and checked against a SHA-256 of the export.
+  - The admin's CSP blocks fetching from localhost.
+- [ ] Step 5: owner reviews the drafts on desktop and phone.
+- [ ] Step 6, at swap time and with the owner's OK (site-wide changes):
+  - header logo set to `logo-lockup.png`, plus the header style
+  - footer content replaced with `footer.html`
+  - Home link added to the navigation
+  - drafts become the live pages, with the old pages moved to Not Linked

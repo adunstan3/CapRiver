@@ -3,8 +3,9 @@
    Structure confirmed on the live site 2026-11-22: section.page-section >
    .content-wrapper > .content > .fluid-engine (24-col grid + margin cols) > .fe-block > .sqs-block */
 
-/* Sections holding our content: no Squarespace padding/height, full width */
-.page-section:has(.crx) { padding: 0 !important; min-height: 0 !important; }
+/* Sections holding our content: no side/bottom padding, full width. Keep Squarespace's
+   padding-top: on the first section it equals the header height (the header overlays it). */
+.page-section:has(.crx) { padding-left: 0 !important; padding-right: 0 !important; padding-bottom: 0 !important; min-height: 0 !important; }
 .page-section:has(.crx) .content-wrapper { padding: 0 !important; max-width: none !important; }
 .page-section:has(.crx) .content { width: 100% !important; max-width: none !important; }
 /* Drop the Fluid Engine grid there, so the Code Block simply flows full-width */
@@ -12,7 +13,21 @@
 .fe-block:has(.crx) { position: static !important; }
 .sqs-block:has(.crx),
 .sqs-block:has(.crx) .sqs-block-content { padding: 0 !important; margin: 0 !important; }
+/* Contain our content's margins (otherwise e.g. the last element's bottom margin leaks out
+   and Squarespace's section background shows through as a strip) */
+.crx { display: flow-root; }
 
 /* Home link in the main navigation: hidden on the homepage itself */
 .homepage #header .header-nav-item:has(a[href="/"]),
 .homepage .header-menu-nav-item:has(a[href="/"]) { display: none !important; }
+
+/* Contact page: Squarespace's native form section sits right after our intro Code Block.
+   Only that section is targeted (adjacent to .crx), so other pages are unaffected. */
+.page-section:has(.crx) + .page-section { padding-top: 0 !important; }
+/* one auto-height row: form and photo share the same top, photo stretches to the form's height */
+.page-section:has(.crx) + .page-section .fluid-engine { grid-template-rows: auto !important; }
+.page-section:has(.crx) + .page-section .fe-block { grid-row-start: 1 !important; grid-row-end: 2 !important; }
+.page-section:has(.crx) + .page-section .sqs-block { justify-content: flex-start !important; }
+@media (max-width: 767px) {
+  .page-section:has(.crx) + .page-section .fe-block:has(img) { display: none !important; }
+}

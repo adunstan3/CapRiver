@@ -28,6 +28,15 @@ COMMENTS_FILE = os.path.join(DEV_DIR, "comments.json")
 CLIENT_JS = os.path.join(DEV_DIR, "comments.js")
 FORMS_FILE = os.path.join(DEV_DIR, "form-submissions.json")
 PHONE_HTML = os.path.join(DEV_DIR, "phone.html")
+EXPORT_DIR = os.path.normpath(os.path.join(DEV_DIR, "..", "squarespace", "out"))
+
+
+def export_cors_origin(origin):
+    """Squarespace admin/site pages may read the exported snippets (read-only)."""
+    import re as _re
+    if origin and _re.match(r"^https://([a-z0-9-]+\.)*(squarespace\.com|capitalriveradvisors\.com)$", origin):
+        return origin
+    return None
 FIXTURES_JS = os.path.join(DEV_DIR, "fixtures.js")  # dev-only sample content (e.g. placeholder testimonials)
 DEV_SCRIPTS = {"/__dev/fixtures.js": FIXTURES_JS, "/__dev/comments.js": CLIENT_JS}
 # fixtures first: it must add sample slides before the site scripts initialise on DOMContentLoaded
@@ -106,6 +115,23 @@ class Handler(SimpleHTTPRequestHandler):
         if path == "/__dev/comments":
             with LOCK:
                 self.send_json(load_comments())
+            return
+        if path.startswith("/__dev/export/"):
+            name = os.path.basename(path[len("/__dev/export/"):])
+            fp = os.path.join(EXPORT_DIR, name)
+            origin = export_cors_origin(self.headers.get("Origin"))
+            if not os.path.isfile(fp) or not origin:
+                self.send_error(404)
+                return
+            with open(fp, "rb") as f:
+                body = f.read()
+            self.send_response(200)
+            self.send_header("Content-Type", "text/plain; charset=utf-8")
+            self.send_header("Access-Control-Allow-Origin", origin)
+            self.send_header("Vary", "Origin")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
             return
         if path == "/__dev/phone":
             with open(PHONE_HTML, "rb") as f:
@@ -191,6 +217,19 @@ class Handler(SimpleHTTPRequestHandler):
             comments.append(comment)
             save_comments(comments)
         self.send_json(comment, 201)
+
+    def do_OPTIONS(self):
+        # CORS / Private Network Access preflight for /__dev/export/ only
+        origin = export_cors_origin(self.headers.get("Origin"))
+        if not self.path.startswith("/__dev/export/") or not origin:
+            self.send_error(404)
+            return
+        self.send_response(204)
+        self.send_header("Access-Control-Allow-Origin", origin)
+        self.send_header("Access-Control-Allow-Methods", "GET")
+        self.send_header("Access-Control-Allow-Private-Network", "true")
+        self.send_header("Vary", "Origin")
+        self.end_headers()
 
     def do_DELETE(self):
         prefix = "/__dev/comments/"
