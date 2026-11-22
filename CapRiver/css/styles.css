@@ -200,12 +200,14 @@ a:hover { color: var(--teal-dark); }
 .hero--image h1 { color: var(--white); text-shadow: 0 2px 18px rgba(4, 8, 58, .45); }
 .hero--image .lead,
 .hero--image .tiny-text { color: rgba(255, 255, 255, .95); text-shadow: 0 1px 10px rgba(4, 8, 58, .6); }
+.hero--image .lead { text-shadow: 0 1px 12px rgba(4, 8, 58, .5); }
 
 /* Laptop/desktop: lock text to the bridge in the photo.
    banner.webp is 2500x1011 (ratio 2.47). Keeping the hero no wider than that
    ratio makes `cover` scale the photo to the hero's HEIGHT, so vertical
    percentages of the hero match the photo exactly:
-     0–30% sky & hills | 30–37.5% roof | 37.5–59% bridge body | 59–100% river */
+     0–30% sky & hills | 30–37.5% roof | 37.5–59% bridge body |
+     59–74% bank & gravel bar | 74–91% water (centre of photo) | 91–100% gravel */
 @media (min-width: 901px) {
   .hero--image {
     display: block;
@@ -216,25 +218,31 @@ a:hover { color: var(--teal-dark); }
   .hero--image .container {
     height: 100%;
     display: grid;
-    grid-template-rows: 30% 7.5% 21.5% 41%;
+    grid-template-rows: 30% 7.5% 21.5% 15% 17% 9%;
   }
   .hero--image h1 {
     grid-row: 1;
     align-self: center;
     max-width: none;
     margin: 0;
+    text-align: center;
     font-size: clamp(2.6rem, 4.6vw, 5rem);
   }
   .hero--image .lead {
     grid-row: 3;
     align-self: center;
+    justify-self: center;
+    text-align: left;
     margin: 0;
-    max-width: 1100px;
+    max-width: 1040px;
     font-size: clamp(1.05rem, 1.35vw, 1.4rem);
     line-height: 1.7;
   }
-  .hero--image .hero__cta { grid-row: 4; align-self: center; }
-  .hero--image .hero__cta .btn { margin-top: 1.2em; }
+  .hero--image .hero__cta { grid-row: 5; align-self: center; justify-self: center; text-align: center; }
+  .hero--image .hero__cta .tiny-text { margin-bottom: .55em; }
+  .hero--image .hero__cta .btn { margin-top: 0; padding: 1.15em 3em; }
+  /* Centred composition: even overlay so text on the right is as readable as the left */
+  .hero--image::before { background: linear-gradient(180deg, rgba(4, 8, 58, .48) 0%, rgba(4, 8, 58, .40) 100%); }
 }
 
 /* Two-column split */
@@ -365,10 +373,10 @@ a:hover { color: var(--teal-dark); }
 .contact-info p { font-size: 0.9rem; }
 .contact-info .tiny-text { color: var(--navy); font-weight: 400; }
 /* Contact: full-width intro, then form + photo with aligned tops */
-.contact-intro { margin-bottom: 3.5vw; text-align: center; }
+.contact-intro { margin-bottom: 3.5vw; }
 .contact-intro h1 { max-width: none; }
-.contact-intro .contact-lead { font-size: 1.15rem; line-height: 1.8; max-width: 860px; margin: 0 auto 1em; }
-.contact-details { display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; gap: .4em 2em; margin: 0; }
+.contact-intro .contact-lead { font-size: 1.15rem; line-height: 1.8; max-width: 860px; margin: 0 0 1em; }
+.contact-details { display: flex; flex-wrap: wrap; align-items: baseline; gap: .4em 2em; margin: 0; }
 .contact-details .text-link { font-size: 1rem; }
 .contact-split { align-items: stretch; }
 .contact-media { position: relative; min-height: 420px; }
