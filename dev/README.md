@@ -12,6 +12,10 @@ The server serves `../CapRiver` and adds `comments.js` to every HTML page it ser
 
 The contact form posts to Netlify Forms in production. Locally, the dev server stands in for Netlify and saves each submission to `dev/form-submissions.json`. No email is sent locally.
 
+## Sample content
+
+The dev server also injects `dev/fixtures.js`, which adds two clearly-labelled placeholder testimonials so the testimonial carousel (dots and auto-cycling) can be previewed. They exist only on the local server. The real site and the Squarespace export have one testimonial.
+
 ## Phone preview
 
 - **Phone view button** (bottom-right of every page): opens `/__dev/phone`, which shows the site in a phone-sized frame. A device picker covers iPhone SE/15/Pro Max, Galaxy, Pixel and iPad mini, and there's a Rotate button. Ctrl+click comments work inside the frame and are tagged with that screen size.

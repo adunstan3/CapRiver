@@ -28,7 +28,10 @@ COMMENTS_FILE = os.path.join(DEV_DIR, "comments.json")
 CLIENT_JS = os.path.join(DEV_DIR, "comments.js")
 FORMS_FILE = os.path.join(DEV_DIR, "form-submissions.json")
 PHONE_HTML = os.path.join(DEV_DIR, "phone.html")
-INJECT = b'<script src="/__dev/comments.js"></script>'
+FIXTURES_JS = os.path.join(DEV_DIR, "fixtures.js")  # dev-only sample content (e.g. placeholder testimonials)
+DEV_SCRIPTS = {"/__dev/fixtures.js": FIXTURES_JS, "/__dev/comments.js": CLIENT_JS}
+# fixtures first: it must add sample slides before the site scripts initialise on DOMContentLoaded
+INJECT = b'<script src="/__dev/fixtures.js"></script><script src="/__dev/comments.js"></script>'
 LOCK = threading.Lock()
 
 
@@ -51,7 +54,7 @@ def save_comments(comments):
 
 def site_version():
     # Include the dev overlay script so open pages pick up tool changes too
-    newest = os.path.getmtime(CLIENT_JS) if os.path.exists(CLIENT_JS) else 0.0
+    newest = max([os.path.getmtime(f) for f in DEV_SCRIPTS.values() if os.path.exists(f)] or [0.0])
     for root, _dirs, files in os.walk(SITE_DIR):
         for name in files:
             try:
@@ -91,8 +94,8 @@ class Handler(SimpleHTTPRequestHandler):
     # ---- routes ----
     def do_GET(self):
         path = self.path.split("?", 1)[0]
-        if path == "/__dev/comments.js":
-            with open(CLIENT_JS, "rb") as f:
+        if path in DEV_SCRIPTS:
+            with open(DEV_SCRIPTS[path], "rb") as f:
                 body = f.read()
             self.send_response(200)
             self.send_header("Content-Type", "application/javascript")

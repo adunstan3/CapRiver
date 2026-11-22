@@ -223,8 +223,55 @@
   margin-top: 1.8em;
   font-style: normal;
 }
-.crx .testimonial cite strong { display: block; color: var(--navy); font-weight: 500; font-size: 1.05rem; }
-.crx .testimonial cite span { font-size: 0.85rem; }
+.crx .testimonial cite strong { display: block; color: var(--navy); font-weight: 500; font-size: 1.3rem; }
+.crx .testimonial cite span { font-size: 0.95rem; }
+.crx .carousel__viewport { overflow: hidden; }
+.crx .carousel__track {
+  display: flex;
+  align-items: center; 
+  transition: transform .7s cubic-bezier(.45, .05, .25, 1);
+}
+.crx .carousel__slide { flex: 0 0 100%; min-width: 0; padding: 0 2px; }
+.crx .carousel__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 2.2em;
+}
+.crx .carousel__controls[hidden] { display: none; }
+.crx .carousel__dots { display: flex; gap: 10px; }
+.crx .carousel__dot {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(4, 8, 58, .22);
+  cursor: pointer;
+  transition: background .25s, transform .25s;
+}
+.crx .carousel__dot:hover { background: rgba(4, 8, 58, .45); }
+.crx .carousel__dot[aria-current="true"] { background: var(--teal); transform: scale(1.25); }
+.crx .carousel__pause {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid rgba(4, 8, 58, .25);
+  border-radius: 50%;
+  background: transparent center / 10px 10px no-repeat;
+  cursor: pointer;
+  
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M2 1h2v8H2zM6 1h2v8H6z' fill='%2304083a'/%3E%3C/svg%3E");
+}
+.crx .carousel__pause[data-paused="true"] {
+  
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M2.5 1l6 4-6 4z' fill='%2304083a'/%3E%3C/svg%3E");
+}
+.crx .carousel__pause:hover { border-color: var(--teal); }
+@media (prefers-reduced-motion: reduce) {
+.crx .carousel__track { transition: none; }
+}
 .crx .cta { text-align: center; }
 .crx .cta h2 { max-width: 18ch; margin: 0 auto .6em; }
 .crx .cta p { max-width: 640px; margin: 0 auto 2.4em; }
@@ -278,9 +325,9 @@
 }
 .crx .site-footer .logo img { width: 155px; }
 .crx .footer-contact { text-align: right; }
-.crx .footer-contact h4 { font-size: 1.4rem; margin-bottom: 1em; }
-.crx .footer-contact a { display: block; font-size: .9rem; color: var(--teal); }
-.crx .footer-contact span { display: block; font-size: .9rem; }
+.crx .footer-contact h4 { font-size: 1.4rem; margin-bottom: .25em; }
+.crx .footer-contact a { display: block; font-size: 1.1rem; line-height: 1.7; color: var(--teal); }
+.crx .footer-contact span { display: block; font-size: 1.1rem; line-height: 1.7; }
 @media (prefers-reduced-motion: reduce) {
 .crx { scroll-behavior: auto; }
 }
