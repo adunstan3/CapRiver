@@ -1,0 +1,37 @@
+/* Menu hover: darker shade of the brand teal (5.2:1 contrast on white) */
+@media (hover: hover) {
+  #header .header-nav-item > a,
+  #header .header-menu-nav-item > a { transition: color .25s ease; }
+  #header .header-nav-item > a:hover,
+  #header .header-menu-nav-item > a:hover { color: #08788a !important; opacity: 1 !important; }
+}
+/* Same color for visitors who tab through the menu with a keyboard */
+#header .header-nav-item > a:focus-visible,
+#header .header-menu-nav-item > a:focus-visible { color: #08788a !important; }
+
+/* Contact page (live + firm-voice copy): top of heading letters lines up with top of photo */
+@media (min-width: 768px) {
+  .fe-block-f6855f981eaa535cc46e,
+  .fe-block-b02c7710e38ea11f5ca0 { grid-row-start: 6 !important; }
+  #block-f6855f981eaa535cc46e,
+  #block-b02c7710e38ea11f5ca0 { justify-content: flex-start !important; }
+  #block-f6855f981eaa535cc46e h1,
+  #block-b02c7710e38ea11f5ca0 h1 { position: relative; top: -0.267em; }
+}
+
+/* About page (live + firm-voice copy): top of name lines up with top of photo */
+@media (min-width: 768px) {
+  #block-488bc9b086d43d288fc6 h1:first-child,
+  #block-adb82bf5cc2e2920ccb0 h1:first-child { margin-top: -0.266em !important; }
+}
+
+/* About headshot (live + firm-voice copy): natural proportions on tablets and small laptops */
+@media (min-width: 768px) and (max-width: 1279.98px) {
+  .fe-block-3e859b38b18b4881cfc4,
+  .fe-block-9d2e7a8d2847071d85d2 { align-self: start !important; height: auto !important; aspect-ratio: ~"511 / 768"; }
+}
+/* Same for small tablets and sideways phones, which get the stacked layout */
+@media (min-width: 480px) and (max-width: 767.98px) {
+  .fe-block-3e859b38b18b4881cfc4,
+  .fe-block-9d2e7a8d2847071d85d2 { justify-self: center !important; width: auto !important; height: 100% !important; aspect-ratio: ~"511 / 768"; }
+}

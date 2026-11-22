@@ -9,7 +9,8 @@ Squarespace "hybrid" approach:
   - Squarespace's native header, navigation and Form Block are kept.
 
 Outputs (squarespace/out/):
-  custom.css          -> paste into Design > Custom CSS
+  custom-css-FULL.css -> the ENTIRE Custom CSS box (existing site rules + ours); replace, never append
+  custom.css          -> just the generated part (for reference)
   page-home.html      -> Code Block on the home page
   page-about.html     -> Code Block on /our-team
   page-services.html  -> Code Block on /services
@@ -33,6 +34,7 @@ SITE = os.path.normpath(os.path.join(ROOT, "..", "CapRiver"))
 OUT = os.path.join(ROOT, "out")
 URLS_FILE = os.path.join(ROOT, "image-urls.json")
 OVERRIDES = os.path.join(ROOT, "squarespace-overrides.css")
+EXISTING_CSS = os.path.join(ROOT, "backup", "custom-css-original.css")  # site's pre-existing Custom CSS
 SCOPE = ".crx"
 
 PAGES = {  # local file -> (output name, Squarespace URL slug)
@@ -89,6 +91,56 @@ def scope_selector(sel):
     return SCOPE + " " + sel
 
 
+def split_decls(body):
+    """Split a rule body on ';' that are outside quotes/parentheses."""
+    parts, buf, depth, quote = [], "", 0, None
+    for ch in body:
+        if quote:
+            buf += ch
+            if ch == quote:
+                quote = None
+            continue
+        if ch in "\"'":
+            quote = ch
+        elif ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth -= 1
+        elif ch == ";" and depth == 0:
+            parts.append(buf)
+            buf = ""
+            continue
+        buf += ch
+    if buf.strip():
+        parts.append(buf)
+    return parts
+
+
+def less_safe(body):
+    """Squarespace compiles Custom CSS with LESS, which does maths on '/' and
+    min()/max(). Wrap such values in LESS escapes (~"...") so they pass through."""
+    out = []
+    for decl in split_decls(body):
+        if ":" not in decl:
+            out.append(decl)
+            continue
+        prop, val = decl.split(":", 1)
+        imp = ""
+        if val.rstrip().endswith("!important"):
+            val, imp = val.rstrip()[:-len("!important")], " !important"
+        probe = re.sub(r"url\((\"[^\"]*\"|'[^']*'|[^)]*)\)", "URL", val)
+        if "/" in probe or re.search(r"\b(min|max)\(", probe):
+            v = val.strip()
+            if '"' not in v:
+                val = f' ~"{v}"'
+            elif "'" not in v:
+                val = f" ~'{v}'"
+            else:
+                raise ValueError(f"can't LESS-escape value: {v}")
+        out.append(f"{prop}:{val}{imp}")
+    return ";".join(out) + (";" if out else "")
+
+
 def keep_rule(selectors):
     return not all(s.strip().startswith(DROP_SELECTOR_PREFIXES) for s in selectors)
 
@@ -114,7 +166,7 @@ def scope_css(css):
             if keep_rule(sels):
                 sels = [s for s in sels if not s.strip().startswith(DROP_SELECTOR_PREFIXES)]
                 scoped = ",\n".join(scope_selector(s) for s in sels)
-                out.append(f"{scoped} {{{body}}}\n")
+                out.append(f"{scoped} {{{less_safe(body)}}}\n")
         i = k + 1
     return "".join(out)
 
@@ -194,8 +246,14 @@ def main():
     with open(os.path.join(OUT, "footer.html"), "w", encoding="utf-8") as f:
         f.write(wrap('<footer class="site-footer">' + clean_html(footer) + "</footer>", "Footer Code Block"))
 
+    generated = build_css()
     with open(os.path.join(OUT, "custom.css"), "w", encoding="utf-8") as f:
-        f.write(build_css())
+        f.write(generated)
+    # The complete Custom CSS box: the site's existing rules (kept verbatim) + ours.
+    # Always paste this whole file, replacing the box's contents.
+    existing = open(EXISTING_CSS, encoding="utf-8").read().rstrip() + "\n"
+    with open(os.path.join(OUT, "custom-css-FULL.css"), "w", encoding="utf-8") as f:
+        f.write(existing + "\n/* ===== Capital River redesign: generated below this line ===== */\n" + generated)
 
     with open(os.path.join(OUT, "images.txt"), "w", encoding="utf-8") as f:
         for name in sorted(used_images):

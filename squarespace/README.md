@@ -49,5 +49,15 @@ The local site shows **Home** (to the left of About) on every page except the ho
 ## Status
 
 - [x] Exporter, logo lockup, carousel (single testimonial in the export)
-- [ ] Step 1: Squarespace sign-in (waiting on the owner)
-- [ ] Steps 2–6
+- [x] Step 1: signed in (2026-11-22)
+- [x] Step 2: looked around, changing nothing:
+  - **Plan:** Business. Custom CSS, Code Injection and JavaScript in Code Blocks are all available, so the carousel script can run on Squarespace later.
+  - **Existing Custom CSS:** 38 lines covering menu hover colours and alignment fixes for the current About and Contact pages, backed up verbatim to `backup/custom-css-original.css`. Always paste `out/custom-css-FULL.css` (existing rules followed by ours) to replace the whole box.
+  - **LESS:** Squarespace compiles Custom CSS with LESS, as the existing `~"511 / 768"` shows. The exporter now escapes every value with `/`, `min()` or `max()`.
+  - **Page structure:** `section.page-section > .content-wrapper > .content > .fluid-engine` (a 24-column grid with margin columns) `> .fe-block > .sqs-block`. Overrides are in `squarespace-overrides.css`.
+  - **Fonts:** the site loads Poppins only in weights 300, 500 and 700. The `@import` adds 400 and 600.
+  - **Homepage:** `<body>` has a `homepage` class, used to hide the Home nav link there.
+  - **Pages:** Main Navigation has About, Services and Contact. Not Linked has the homepage plus several older copies ("… FIRM", "About Us", etc.), which must not be touched.
+- [ ] Confirm the LESS compile: paste into the Custom CSS editor and check for errors before saving
+- [ ] Step 3: upload images to Assets, then fill in `image-urls.json`
+- [ ] Steps 4–6
