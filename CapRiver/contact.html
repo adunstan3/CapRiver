@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact | Request a Consultation — Capital River Advisors</title>
+  <meta name="description" content="Tell Capital River Advisors about your business and what you're trying to fund. Working virtually with businesses nationwide.">
+  <link rel="icon" href="images/favicon.webp" type="image/webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to Content</a>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="logo" href="index.html"><img src="images/logo.webp" alt="Capital River Advisors" width="750" height="726"></a>
+      <button class="menu-toggle" aria-label="Open Menu" aria-expanded="false" aria-controls="site-nav"><span></span><span></span><span></span></button>
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="contact.html" aria-current="page">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="section section--white page-intro" style="padding-top:4vw">
+      <div class="container">
+        <div class="split">
+          <div class="text-col contact-info">
+            <h1 class="reveal">Let's talk about your financing</h1>
+            <div class="reveal" style="margin-top:2.4em">
+              <p>Tell me a little about your business and what you're trying to accomplish. I'll review your note and follow up to arrange a time to talk.</p>
+              <p style="margin:0"><a class="text-link" href="mailto:contact@capitalriveradvisors.com">contact@capitalriveradvisors.com</a></p>
+              <p>(434) 260-1323</p>
+              <p class="tiny-text">Working virtually with businesses nationwide</p>
+            </div>
+
+            <form class="form" id="contact-form" novalidate>
+              <fieldset>
+                <legend>Name</legend>
+                <div class="row">
+                  <div class="field" data-required>
+                    <label class="sub-label" for="fname">First Name <span class="req">(required)</span></label>
+                    <input type="text" id="fname" name="fname" autocomplete="given-name">
+                    <div class="error">First name is required.</div>
+                  </div>
+                  <div class="field" data-required>
+                    <label class="sub-label" for="lname">Last Name <span class="req">(required)</span></label>
+                    <input type="text" id="lname" name="lname" autocomplete="family-name">
+                    <div class="error">Last name is required.</div>
+                  </div>
+                </div>
+              </fieldset>
+
+              <div class="field" data-required>
+                <label class="label" for="email">Email <span class="req">(required)</span></label>
+                <input type="email" id="email" name="email" autocomplete="email">
+                <div class="error">Please enter a valid email address.</div>
+              </div>
+
+              <div class="field">
+                <label class="label" for="phone">Phone</label>
+                <input type="tel" id="phone" name="phone" autocomplete="tel">
+              </div>
+
+              <div class="field">
+                <label class="label" for="business">Business name</label>
+                <input type="text" id="business" name="business" autocomplete="organization">
+              </div>
+
+              <div class="field">
+                <label class="label" for="amount">Roughly how much financing?</label>
+                <select id="amount" name="amount" required>
+                  <option value="" disabled selected>Select an option</option>
+                  <option>Under $250K</option>
+                  <option>$250K – $1M</option>
+                  <option>$1M – $5M</option>
+                  <option>Over $5M</option>
+                  <option>Not sure yet</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label class="label" for="purpose">What's it for?</label>
+                <select id="purpose" name="purpose" required>
+                  <option value="" disabled selected>Select an option</option>
+                  <option>Growth or expansion</option>
+                  <option>Equipment</option>
+                  <option>Real estate</option>
+                  <option>Working capital</option>
+                  <option>Refinance</option>
+                  <option>Not sure yet</option>
+                </select>
+              </div>
+
+              <fieldset class="field">
+                <legend>Have you been declined for a loan in the last 12 months?</legend>
+                <div class="checks">
+                  <label><input type="checkbox" name="declined" value="No"> No</label>
+                  <label><input type="checkbox" name="declined" value="Yes"> Yes</label>
+                </div>
+              </fieldset>
+
+              <div class="field" data-required>
+                <label class="label" for="message">Message <span class="req">(required)</span></label>
+                <textarea id="message" name="message" rows="3"></textarea>
+                <div class="error">Please include a short message.</div>
+              </div>
+
+              <button type="submit" class="btn btn--navy btn--small">Send message</button>
+            </form>
+
+            <div class="form-success" role="status">
+              <h4>Thank you!</h4>
+              <p style="margin:0">Your email app should open with your message ready to send. If it doesn't, email <a href="mailto:contact@capitalriveradvisors.com">contact@capitalriveradvisors.com</a> directly.</p>
+            </div>
+          </div>
+
+          <div class="contact-media reveal">
+            <img src="images/contact-river.webp" alt="Aerial view of a river winding through green grassland">
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <a class="logo" href="index.html"><img src="images/logo.webp" alt="Capital River Advisors" width="750" height="726"></a>
+      <div class="footer-contact">
+        <h4>Contact</h4>
+        <a href="mailto:contact@capitalriveradvisors.com">contact@capitalriveradvisors.com</a>
+        <span>(434) 260-1323</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
