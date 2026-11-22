@@ -49,7 +49,8 @@ def save_comments(comments):
 
 
 def site_version():
-    newest = 0.0
+    # Include the dev overlay script so open pages pick up tool changes too
+    newest = os.path.getmtime(CLIENT_JS) if os.path.exists(CLIENT_JS) else 0.0
     for root, _dirs, files in os.walk(SITE_DIR):
         for name in files:
             try:

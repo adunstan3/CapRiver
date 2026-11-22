@@ -77,16 +77,30 @@ a:hover { color: var(--teal-dark); }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 2.6vw;
-  padding-bottom: 2.6vw;
+  padding-top: 18px;
+  padding-bottom: 18px;
 }
 .logo img { width: 290px; max-width: 42vw; }
+
+/* Header brand lockup: icon left, name right */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  color: #0c2034;
+}
+.brand:hover { color: #0c2034; }
+.brand__mark { width: 62px; height: auto; flex-shrink: 0; }
+.brand__text { display: flex; flex-direction: column; text-transform: uppercase; line-height: 1.15; }
+.brand__name { font-weight: 600; font-size: 1.3rem; letter-spacing: .14em; }
+.brand__sub { font-weight: 400; font-size: 1.05rem; letter-spacing: .34em; }
 
 .site-nav { display: flex; gap: 2.4em; }
 .site-nav a {
   color: var(--ink);
   text-decoration: none;
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   font-weight: 300;
   padding-bottom: 4px;
   border-bottom: 1px solid transparent;
@@ -148,11 +162,6 @@ a:hover { color: var(--teal-dark); }
 .small-text { font-size: 0.85rem; line-height: 1.85; }
 .tiny-text { font-size: 0.75rem; }
 
-/* Banner */
-.banner { padding: 1vw 0 2vw; }
-.banner .container { padding: 0 8%; }
-.banner img { width: 100%; aspect-ratio: 1200 / 360; object-fit: cover; }
-
 /* Hero */
 .hero {
   min-height: 78vh;
@@ -169,7 +178,25 @@ a:hover { color: var(--teal-dark); }
   margin-bottom: .9em;
 }
 .hero .tiny-text { font-size: 1rem; margin-bottom: 0; }
-.hero .btn { margin-top: 13vh; }
+.hero .btn { margin-top: 2.6em; }
+
+/* Hero with the covered-bridge photo behind a navy overlay */
+.hero--image {
+  position: relative;
+  min-height: min(78vh, 760px);
+  background: var(--navy) url("../images/banner.webp") center 60% / cover no-repeat;
+  color: rgba(255, 255, 255, .92);
+}
+.hero--image::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(4, 8, 58, .80) 0%, rgba(4, 8, 58, .62) 50%, rgba(4, 8, 58, .38) 100%);
+}
+.hero--image .container { position: relative; }
+.hero--image h1 { color: var(--white); }
+.hero--image .lead,
+.hero--image .tiny-text { color: rgba(255, 255, 255, .9); }
 
 /* Two-column split */
 .split {
@@ -389,7 +416,10 @@ a:hover { color: var(--teal-dark); }
   .site-nav a { font-size: 2rem; }
   .menu-open .site-nav { opacity: 1; visibility: visible; }
   .menu-open { overflow: hidden; }
-  .logo { position: relative; z-index: 30; }
+  .brand { position: relative; z-index: 30; gap: 10px; }
+  .brand__mark { width: 46px; }
+  .brand__name { font-size: 1rem; }
+  .brand__sub { font-size: .82rem; }
 
   .section { padding: 14vw 0; }
   .split, .intro .split, .meet .split, .services-intro .split { grid-template-columns: 1fr; gap: 10vw; }
@@ -401,8 +431,8 @@ a:hover { color: var(--teal-dark); }
   .meet__media img { width: 100%; }
   .services-intro__media img { width: 100%; }
   .hero { min-height: 0; }
+  .hero--image::before { background: rgba(4, 8, 58, .7); }
   .hero .btn { margin-top: 3em; }
-  .banner .container { padding: 0 var(--gutter); }
   .site-footer .container { padding: 0 var(--gutter); flex-direction: column; gap: 2em; }
   .footer-contact { text-align: center; }
   .form .row { grid-template-columns: 1fr; }

@@ -38,6 +38,14 @@
     '.__dc-pop textarea:focus{border-color:' + ORANGE + '}',
     '.__dc-pop .__dc-hint{color:#888;font-size:11px;margin-top:6px}',
     '.__dc-pop .__dc-tag{color:#888;font:11px/1.3 ui-monospace,Menlo,monospace;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}',
+    '.__dc-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px}',
+    '.__dc-row .__dc-hint{margin-top:0}',
+    '.__dc-mic{flex-shrink:0;width:30px;height:30px;border-radius:50%;border:1px solid #ddd;background:#fff;color:#444;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:0}',
+    '.__dc-mic:hover{border-color:' + ORANGE + ';color:' + ORANGE + '}',
+    '.__dc-mic[disabled]{opacity:.35;cursor:not-allowed}',
+    '.__dc-mic.on{background:#e5372b;border-color:#e5372b;color:#fff;animation:__dcpulse 1.2s ease-in-out infinite}',
+    '@keyframes __dcpulse{0%,100%{box-shadow:0 0 0 0 rgba(229,55,43,.45)}50%{box-shadow:0 0 0 6px rgba(229,55,43,0)}}',
+    '.__dc-status{font-size:11px;color:#e5372b;margin-top:4px;min-height:0}',
     '.__dc-item{padding:7px 0;border-bottom:1px solid #eee;display:flex;gap:8px;align-items:flex-start}',
     '.__dc-item:last-child{border-bottom:0}',
     '.__dc-item p{margin:0;flex:1;white-space:pre-wrap;word-break:break-word}',
@@ -92,7 +100,59 @@
   }
 
   // ---------- popups ----------
+  // ---------- dictation (Web Speech API: Chrome, Edge, Safari) ----------
+  var SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var rec = null;
+  var MIC_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v1a7 7 0 0 0 14 0v-1"/><line x1="12" y1="18" x2="12" y2="22"/></svg>';
+
+  function stopDictation() {
+    if (rec) { try { rec.stop(); } catch (e) {} }
+  }
+
+  function startDictation(ta, btn, status) {
+    if (!SpeechRec) return;
+    var base = ta.value;
+    var finals = '';
+    rec = new SpeechRec();
+    rec.lang = navigator.language || 'en-US';
+    rec.continuous = true;
+    rec.interimResults = true;
+    btn.classList.add('on');
+    btn.title = 'Stop dictation';
+    status.textContent = 'Listening… click the mic again to stop';
+    rec.onresult = function (ev) {
+      var interim = '';
+      for (var i = ev.resultIndex; i < ev.results.length; i++) {
+        var t = ev.results[i][0].transcript;
+        if (ev.results[i].isFinal) finals += t; else interim += t;
+      }
+      var spoken = (finals + interim).replace(/^\s+/, '');
+      if (spoken) spoken = spoken.charAt(0).toUpperCase() + spoken.slice(1);
+      ta.value = base + (base && spoken && !/\s$/.test(base) ? ' ' : '') + spoken;
+      ta.scrollTop = ta.scrollHeight;
+    };
+    rec.onerror = function (ev) {
+      var msg = {
+        'not-allowed': 'Microphone blocked. Allow mic access for localhost in the browser.',
+        'service-not-allowed': 'Dictation is turned off in this browser.',
+        'no-speech': 'No speech heard. Try again.',
+        'network': 'Dictation needs an internet connection.',
+        'audio-capture': 'No microphone found.'
+      }[ev.error] || ('Dictation error: ' + ev.error);
+      status.textContent = msg;
+    };
+    rec.onend = function () {
+      btn.classList.remove('on');
+      btn.title = 'Dictate comment';
+      if (/^Listening/.test(status.textContent)) status.textContent = '';
+      rec = null;
+      ta.focus();
+    };
+    try { rec.start(); } catch (e) { status.textContent = 'Could not start dictation.'; }
+  }
+
   function closePopup() {
+    stopDictation();
     if (!popup) return;
     if (popup._target) popup._target.classList.remove('__dc-target');
     popup.remove();
@@ -115,16 +175,31 @@
     var p = document.createElement('div');
     p.className = '__dc-ui __dc-pop';
     p._target = target;
-    p.innerHTML = '<div class="__dc-tag"></div><textarea placeholder="How should this element change?"></textarea><div class="__dc-hint">Enter to save · Shift+Enter for new line · Esc to cancel</div>';
+    p.innerHTML = '<div class="__dc-tag"></div><textarea placeholder="How should this element change? Type, or click the mic to dictate."></textarea>' +
+      '<div class="__dc-row"><div class="__dc-hint">Enter to save · Shift+Enter new line · Esc cancel</div>' +
+      '<button type="button" class="__dc-mic" title="Dictate comment">' + MIC_SVG + '</button></div>' +
+      '<div class="__dc-status"></div>';
     p.querySelector('.__dc-tag').textContent = tagLabel(target);
     popup = p;
     placePopup(p, pageX, pageY);
     var ta = p.querySelector('textarea');
+    var mic = p.querySelector('.__dc-mic');
+    var status = p.querySelector('.__dc-status');
+    if (!SpeechRec) {
+      mic.disabled = true;
+      mic.title = 'Dictation is not supported in this browser (use Chrome, Edge or Safari), or use macOS Dictation: press Fn twice';
+    }
+    mic.addEventListener('mousedown', function (e) { e.preventDefault(); }); // keep focus in the textarea
+    mic.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (rec) stopDictation(); else startDictation(ta, mic, status);
+    });
     ta.focus();
     ta.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') { e.preventDefault(); closePopup(); }
       else if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
         e.preventDefault();
+        stopDictation();
         var text = ta.value.trim();
         if (!text) { closePopup(); return; }
         ta.disabled = true;
